@@ -6,7 +6,7 @@
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
     <link rel="stylesheet" href="./css/master.css">
   </head>
-  <body class="flexCol">
+  <body class="flexCol" ng-app='app' ng-controller='ctrl'>
 
     <div class="container">
 
@@ -113,7 +113,7 @@
         <div class="itemSection flexRow">
 
           <div class="itemBox flexCol">
-            <div class="itemImage"></div>
+            <div data='1' class="itemImage" ng-click='moveToCart($event)'></div>
             <div class="itemDesciption flexRow">
               <div class="desciption flexCol">
                 <h2>DROP DEAD RED SHOES</h2>
@@ -125,7 +125,7 @@
             </div>
           </div>
           <div class="itemBox flexCol">
-            <div class="itemImage"></div>
+            <div data='2' class="itemImage" ng-click='moveToCart($event)'></div>
             <div class="itemDesciption flexRow">
               <div class="desciption flexCol">
                 <h2>DROP DEAD RED SHOES</h2>
@@ -137,7 +137,7 @@
             </div>
           </div>
           <div class="itemBox flexCol">
-            <div class="itemImage"></div>
+            <div data='3' class="itemImage" ng-click='moveToCart($event)'></div>
             <div class="itemDesciption flexRow">
               <div class="desciption flexCol">
                 <h2>DROP DEAD RED SHOES</h2>
@@ -149,7 +149,7 @@
             </div>
           </div>
           <div class="itemBox flexCol">
-            <div class="itemImage"></div>
+            <div data='4' class="itemImage" ng-click='moveToCart($event)'></div>
             <div class="itemDesciption flexRow">
               <div class="desciption flexCol">
                 <h2>DROP DEAD RED SHOES</h2>
@@ -161,7 +161,7 @@
             </div>
           </div>
           <div class="itemBox flexCol">
-            <div class="itemImage"></div>
+            <div data='5' class="itemImage" ng-click='moveToCart($event)'></div>
             <div class="itemDesciption flexRow">
               <div class="desciption flexCol">
                 <h2>DROP DEAD RED SHOES</h2>
@@ -173,7 +173,7 @@
             </div>
           </div>
           <div class="itemBox flexCol">
-            <div class="itemImage"></div>
+            <div data='6' class="itemImage" ng-click='moveToCart($event)'></div>
             <div class="itemDesciption flexRow">
               <div class="desciption flexCol">
                 <h2>DROP DEAD RED SHOES</h2>
@@ -193,6 +193,8 @@
 
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
   </body>
 </html>
