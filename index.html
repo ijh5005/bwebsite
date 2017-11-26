@@ -4,104 +4,76 @@
     <meta charset="utf-8">
     <title>sew&so</title>
     <link href="https://fonts.googleapis.com/css?family=Barlow+Condensed:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
     <link rel="stylesheet" href="./css/master.css">
   </head>
-  <body class="flexCol" ng-app='app' ng-controller='ctrl'>
+  <body class="flexCol" ng-app='app' ng-controller='ctrl' ng-cloak>
 
     <div class="container">
 
+      <!--        NAVIGATOIN         -->
       <div class="navigationBar flexRow">
-        <p>HOME</p>
-        <p>BRANDS</p>
-        <p>DESIGNERS</p>
-        <p>CONTACT</p>
+        <p ng-repeat="nav in navOptions" class="pointer">{{nav}}</p>
       </div>
 
+      <!--        PAGEBODY         -->
       <div class="pageBody flexRow">
 
+        <!--        SIDEBAR         -->
         <div class="sideBar flexRow">
           <div class="sideBarLiner">
             <div class="sideBarOption flexCol cart">
               <div class="cartItemHeading flexRow">
                 <h1>CART</h1>
                 <img src="./images/shoppingBag.png" alt="">
+                <div class="itemNumber flexRow"><p>{{cartQuantity}}</p></div>
               </div>
 
-              <div class="cartItem flexRow">
-                <img src="" alt="">
-                <div class="cartItemDescriptionSection">
-                  <h2 class="cartItemDescription">HANDBAG MADE FOR WALKG</h2>
-                  <h2 class="cartItemPrice">$40</h2>
-                </div>
-              </div>
-              <div class="cartItem flexRow">
-                <img src="" alt="">
-                <div class="cartItemDescriptionSection">
-                  <h2 class="cartItemDescription">HANDBAG MADE FOR WALKG</h2>
-                  <h2 class="cartItemPrice">$40</h2>
+              <!--        CART SECTION         -->
+              <div class="cartItemsHolder">
+                <div id={{$index}} class="cartItem flexRow" ng-repeat="cartItem in cartItems track by $index">
+                  <img src={{cartItem.img}} alt="">
+                  <div class="cartItemDescriptionSection">
+                    <h2 class="cartItemDescription">{{cartItem.name}}</h2>
+                    <h2 class="cartItemPrice">{{cartItem.price}}</h2>
+                  </div>
                 </div>
               </div>
 
             </div>
+
+            <!--        CATEGORIES         -->
             <div class="sideBarOption flexCol categories">
               <h1>CATEGORIES</h1>
 
-              <div class="categoriesFilter flexRow">
-                <div class="checkBox"></div>
-                <div class="filterText">NEW ARRIVALS</div>
-              </div>
-              <div class="categoriesFilter flexRow">
-                <div class="checkBox"></div>
-                <div class="filterText">NEW ARRIVALS</div>
+              <div class="categoriesFilter flexRow" ng-repeat="category in filters.categories track by $index">
+                <div data-category={{$index}} class="checkBox pointer" ng-click='checkboxClick($event, $index)'></div>
+                <div class="filterText">{{category}}</div>
               </div>
 
             </div>
+
+            <!--        COLORS         -->
             <div class="sideBarOption flexCol colors">
               <h1>COLORS</h1>
               <div class="colorSection flexRow">
 
-                <div class="colorStrip flexRow">
-                  <div class="colorCicrle"></div>
-                  <div class="filterText">Light Red</div>
-                </div>
-                <div class="colorStrip flexRow">
-                  <div class="colorCicrle"></div>
-                  <div class="filterText">Light Red</div>
-                </div>
-                <div class="colorStrip flexRow">
-                  <div class="colorCicrle"></div>
-                  <div class="filterText">Light Red</div>
-                </div>
-                <div class="colorStrip flexRow">
-                  <div class="colorCicrle"></div>
-                  <div class="filterText">Light Red</div>
-                </div>
-                <div class="colorStrip flexRow">
-                  <div class="colorCicrle"></div>
-                  <div class="filterText">Light Red</div>
+                <div class="colorStrip flexRow" ng-repeat="color in filters.colors track by $index">
+                  <div data-color={{$index}} class="colorCircle pointer" style="background-color: {{color.hex}}" ng-click='colorClick($event, $index)'></div>
+                  <div data-color={{$index}} class="filterText pointer" ng-click='colorClick($event, $index)'>{{color.name}}</div>
                 </div>
 
               </div>
             </div>
+
+            <!--        SIZES         -->
             <div class="sideBarOption flexCol sizes">
               <h1>SIZES</h1>
               <div class="sideBarSection flexRow">
 
-                <div class="sideBarStrip flexRow">
-                  <div class="checkBox"></div>
-                  <div class="filterText">XS</div>
-                </div>
-                <div class="sideBarStrip flexRow">
-                  <div class="checkBox"></div>
-                  <div class="filterText">S</div>
-                </div>
-                <div class="sideBarStrip flexRow">
-                  <div class="checkBox"></div>
-                  <div class="filterText">L</div>
-                </div>
-                <div class="sideBarStrip flexRow">
-                  <div class="checkBox"></div>
-                  <div class="filterText">XL</div>
+                <div class="sideBarStrip flexRow" ng-repeat="size in filters.sizes">
+                  <div data-size={{$index}} class="checkBox pointer" ng-click='checkboxClick($event, $index)'></div>
+                  <div class="filterText">{{size}}</div>
                 </div>
 
               </div>
@@ -110,84 +82,44 @@
           </div>
         </div>
 
+        <!--        ITEM SECTION         -->
         <div class="itemSection flexRow">
+          <div id={{$index}} class="itemBox flexCol"  ng-repeat="product in products track by $index" ng-mouseover="showOptions($event)" ng-mouseleave="hideOptions($event)">
 
-          <div class="itemBox flexCol">
-            <div data='1' class="itemImage" ng-click='moveToCart($event)'></div>
-            <div class="itemDesciption flexRow">
-              <div class="desciption flexCol">
-                <h2>DROP DEAD RED SHOES</h2>
-                <p>summer shoes</p>
-              </div>
-              <div class="itemPriceSection flexRow">
-                <h2>$39</h2>
-              </div>
-            </div>
-          </div>
-          <div class="itemBox flexCol">
-            <div data='2' class="itemImage" ng-click='moveToCart($event)'></div>
-            <div class="itemDesciption flexRow">
-              <div class="desciption flexCol">
-                <h2>DROP DEAD RED SHOES</h2>
-                <p>summer shoes</p>
-              </div>
-              <div class="itemPriceSection flexRow">
-                <h2>$39</h2>
+            <div id={{$index}} class="itemPreview">
+              <img data={{$index}} src={{product.img}} class="itemImage" alt="">
+              <div class="itemDesciption flexRow">
+                <div class="desciption flexCol">
+                  <h2>{{product.name}}</h2>
+                  <p>{{product.desciption}}</p>
+                </div>
+                <div class="itemPriceSection flexRow">
+                  <h2>{{product.price}}</h2>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="itemBox flexCol">
-            <div data='3' class="itemImage" ng-click='moveToCart($event)'></div>
-            <div class="itemDesciption flexRow">
-              <div class="desciption flexCol">
-                <h2>DROP DEAD RED SHOES</h2>
-                <p>summer shoes</p>
-              </div>
-              <div class="itemPriceSection flexRow">
-                <h2>$39</h2>
-              </div>
-            </div>
-          </div>
-          <div class="itemBox flexCol">
-            <div data='4' class="itemImage" ng-click='moveToCart($event)'></div>
-            <div class="itemDesciption flexRow">
-              <div class="desciption flexCol">
-                <h2>DROP DEAD RED SHOES</h2>
-                <p>summer shoes</p>
-              </div>
-              <div class="itemPriceSection flexRow">
-                <h2>$39</h2>
-              </div>
-            </div>
-          </div>
-          <div class="itemBox flexCol">
-            <div data='5' class="itemImage" ng-click='moveToCart($event)'></div>
-            <div class="itemDesciption flexRow">
-              <div class="desciption flexCol">
-                <h2>DROP DEAD RED SHOES</h2>
-                <p>summer shoes</p>
-              </div>
-              <div class="itemPriceSection flexRow">
-                <h2>$39</h2>
-              </div>
-            </div>
-          </div>
-          <div class="itemBox flexCol">
-            <div data='6' class="itemImage" ng-click='moveToCart($event)'></div>
-            <div class="itemDesciption flexRow">
-              <div class="desciption flexCol">
-                <h2>DROP DEAD RED SHOES</h2>
-                <p>summer shoes</p>
-              </div>
-              <div class="itemPriceSection flexRow">
-                <h2>$39</h2>
-              </div>
-            </div>
-          </div>
 
+            <div id={{$index}} class="options">
+              <img src={{product.img}} class="itemImage" alt="">
+              <div class="itemDesciption flexRow">
+                <div class="desciption flexCol">
+                  <h2>{{product.name}}</h2>
+                  <p>{{product.desciption}}</p>
+                  <p class="details">{{product.details}}</p>
+                </div>
+                <div class="itemPriceSection flexRow">
+                  <h2>{{product.price}}</h2>
+                </div>
+              </div>
+              <div class="optionsBgColor"></div>
+              <div class="optionsScreen flexRow">
+                <div ng-if='clickIt'>
+                  <div tocart class="pointer"></div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
-
 
       </div>
 
