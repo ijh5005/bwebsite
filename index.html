@@ -37,6 +37,7 @@
                     <h2 class="cartItemDescription">{{cartItem.name}}</h2>
                     <h2 class="cartItemPrice">{{cartItem.price}}</h2>
                   </div>
+                  <div data-cartId={{$index}} class="xBtn pointer" ng-click='removeFromCart($index)'><p>x</p></div>
                 </div>
               </div>
 
@@ -114,6 +115,7 @@
               <div class="optionsBgColor"></div>
               <div class="optionsScreen flexRow">
                 <div ng-if='clickIt'>
+                  <div view class="pointer"></div>
                   <div tocart class="pointer"></div>
                 </div>
               </div>
@@ -125,8 +127,21 @@
 
     </div>
 
+    <div class="shoppingCartBigView flexRow">
+      <div class="shadedArea" ng-click="hideBigView()"></div>
+      <div class="bigView flexRow">
+        <div class="leftArrow flexRow"><p>&#x276E;</p></div>
+        <div class="bigImgSection flexRow">
+          <img src={{currentSlideImg}} alt="">
+        </div>
+        <div class="rightArrow flexRow"><p>&#x276F;</p></div>
+        <div class="xBtnBigView flexRow" ng-click="hideBigView()"><p>&#xd7;</p></div>
+      </div>
+    </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script type="text/javascript" src="./js/database.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
   </body>
 </html>

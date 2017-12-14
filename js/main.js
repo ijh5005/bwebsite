@@ -1,12 +1,8 @@
 'use strict';
 
-
-////bind click event on add to cart btn
-////unbind it after clicked
-
 var app = angular.module('app', []);
 
-app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animate', 'data', function($scope, $rootScope, $interval, $timeout, animate, data){
+app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animate', 'data', 'task', function($scope, $rootScope, $interval, $timeout, animate, data, task){
   $scope.name = 'name';
   $scope.products = data.products;
   $scope.cartItems = data.cartItems;
@@ -51,11 +47,6 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
                                             }
     });
   }
-  $rootScope.bind = true
-  $rootScope.cartQuantity = data.getCartLength();
-  $rootScope.clickIt = true;
-  $rootScope.trackItems = 0;
-
   $scope.moveToCart = (e, index) => {
     $rootScope.trackItems++;
     $rootScope.clickIt = false;
@@ -63,12 +54,36 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
     const selector = '.itemImage[data=' + nodeValue + ']';
     animate.itemToShoppingCart(selector, nodeValue, index);
   }
-
+  $scope.viewItem = (e, index) => {
+    const nodeValue = e.currentTarget.attributes[0].nodeValue;
+    animate.viewItem(nodeValue);
+  }
+  $scope.removeFromCart = (index) => {
+    $scope.cartItems.splice(index, 1);
+    $rootScope.trackItems--;
+  }
+  $scope.hideBigView = () => {
+    $('.shoppingCartBigView').hide();
+  }
+  $rootScope.bind = true
+  $rootScope.viewSlideShow = [];
+  $rootScope.currentSlideImg;
+  $rootScope.currentSlideImgNumber = 0;
+  $rootScope.cartQuantity = data.getCartLength();
+  $rootScope.clickIt = true;
+  $rootScope.trackItems = 0;
+  task.init();
 }]);
 
 app.directive("tocart", function($rootScope) {
   return {
-    template: '<div data={{$index}} disableclick class="addToCartBtn flexRow pointer" ng-click="moveToCart($event, $index)"><p data={{$index}} disableclick class="pointer addToChartText" ng-click="moveToCart($event, $index)">ADD TO CART</p></div>'
+    template: '<div data={{$index}} disableclick class="addToCartBtn flexRow pointer" ng-click="moveToCart($event, $index)"><p data={{$index}} disableclick class="addToChartText" ng-click="moveToCart($event, $index)">ADD TO CART</p></div>'
+  }
+});
+
+app.directive("view", function($rootScope) {
+  return {
+    template: '<div data={{$index}} disableclick class="viewBtn flexRow pointer" ng-click="viewItem($event, $index)"><p data={{$index}} disableclick class="addToChartText" ng-click="viewItem($event, $index)">VIEW GALLERY</p></div>'
   }
 });
 
@@ -126,55 +141,17 @@ app.service('animate', function($rootScope, $timeout, data){
       });
     }, 50);
   }
+  this.viewItem = (nodeValue) => {
+    $rootScope.viewSlideShow = products[nodeValue].imgSlideShow;
+    $rootScope.currentSlideImg = $rootScope.viewSlideShow[$rootScope.currentSlideImgNumber];
+    $('.shoppingCartBigView').show();
+  }
 });
 
 app.service('data', function($rootScope, $interval){
   this.navOptions = ['HOME', 'BRANDS', 'DESIGNERS', 'CONTACT'],
   this.cartItems = [],
-  this.products = [
-    {
-      name: 'DROP DEAD RED SHOES',
-      price: '$38',
-      img: './images/redshoes.jpg',
-      desciption: 'summer shoes',
-      details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultricies tellus lacus, quis iaculis magna lobortis at. Vestibulum ante ipsum, convallis vitae nibh at, dapibus faucibus lectus. Sed vitae libero vehicula, feugiat sem eget, tincidunt dolor.'
-    },
-    {
-      name: 'DROP DEAD RED SHOES',
-      price: '$36',
-      img: './images/redshoes.jpg',
-      desciption: 'summer shoes',
-      details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultricies tellus lacus, quis iaculis magna lobortis at. Vestibulum ante ipsum, convallis vitae nibh at, dapibus faucibus lectus. Sed vitae libero vehicula, feugiat sem eget, tincidunt dolor.'
-    },
-    {
-      name: 'DROP DEAD RED SHOES',
-      price: '$39',
-      img: './images/redshoes.jpg',
-      desciption: 'summer shoes',
-      details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultricies tellus lacus, quis iaculis magna lobortis at. Vestibulum ante ipsum, convallis vitae nibh at, dapibus faucibus lectus. Sed vitae libero vehicula, feugiat sem eget, tincidunt dolor.'
-    },
-    {
-      name: 'DROP DEAD RED SHOES',
-      price: '$39',
-      img: './images/redshoes.jpg',
-      desciption: 'summer shoes',
-      details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultricies tellus lacus, quis iaculis magna lobortis at. Vestibulum ante ipsum, convallis vitae nibh at, dapibus faucibus lectus. Sed vitae libero vehicula, feugiat sem eget, tincidunt dolor.'
-    },
-    {
-      name: 'DROP DEAD RED SHOES',
-      price: '$39',
-      img: './images/redshoes.jpg',
-      desciption: 'summer shoes',
-      details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultricies tellus lacus, quis iaculis magna lobortis at. Vestibulum ante ipsum, convallis vitae nibh at, dapibus faucibus lectus. Sed vitae libero vehicula, feugiat sem eget, tincidunt dolor.'
-    },
-    {
-      name: 'DROP DEAD RED SHOES',
-      price: '$39',
-      img: './images/redshoes.jpg',
-      desciption: 'summer shoes',
-      details: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In ultricies tellus lacus, quis iaculis magna lobortis at. Vestibulum ante ipsum, convallis vitae nibh at, dapibus faucibus lectus. Sed vitae libero vehicula, feugiat sem eget, tincidunt dolor.'
-    }
-  ];
+  this.products = products;           // this comes from database.js
   this.getCartLength = () => {
     $interval(() => {
       $rootScope.cartQuantity = this.cartItems.length;
@@ -189,5 +166,11 @@ app.service('data', function($rootScope, $interval){
       { name: 'Light Red', hex: '#ed7d7d' },
     ],
     sizes: ['XS', 'S', 'M', 'L']
+  }
+});
+
+app.service('task', function($rootScope, $timeout, data){
+  this.init = () => {
+    $('.shoppingCartBigView').hide();
   }
 });
