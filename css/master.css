@@ -279,6 +279,10 @@ html {
   width: 18em;
 }
 
+.borderRed {
+  border: 2px solid red;
+}
+
 .options {
   left: 100vw;
   position: relative;

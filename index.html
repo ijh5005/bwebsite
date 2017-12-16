@@ -85,7 +85,7 @@
 
         <!--        ITEM SECTION         -->
         <div class="itemSection flexRow">
-          <div id={{$index}} class="itemBox flexCol"  ng-repeat="product in products track by $index" ng-mouseover="showOptions($event)" ng-mouseleave="hideOptions($event)">
+          <div id={{$index}} class="itemBox flexCol" ng-class={{dynamicClasses}}  ng-repeat="product in products track by $index" ng-mouseover="showOptions($event)" ng-mouseleave="hideOptions($event)">
 
             <div id={{$index}} class="itemPreview">
               <img data={{$index}} src={{product.img}} class="itemImage" alt="">

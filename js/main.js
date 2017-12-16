@@ -72,7 +72,13 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
   $rootScope.cartQuantity = data.getCartLength();
   $rootScope.clickIt = true;
   $rootScope.trackItems = 0;
+  $rootScope.galleryImgBorderColor = 'red';
+  $rootScope.dynamicClasses = 'borderRed';
   task.init();
+
+//trying to tie a class to an html element to change the border-color
+
+
 }]);
 
 app.directive("tocart", function($rootScope) {
