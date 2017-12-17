@@ -2,7 +2,7 @@
 
 var app = angular.module('app', []);
 
-app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animate', 'data', 'task', function($scope, $rootScope, $interval, $timeout, animate, data, task){
+app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animate', 'data', 'task', 'navigate', function($scope, $rootScope, $interval, $timeout, animate, data, task, navigate){
   $scope.name = 'name';
   $scope.products = data.products;
   $scope.cartItems = data.cartItems;
@@ -54,9 +54,11 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
     const selector = '.itemImage[data=' + nodeValue + ']';
     animate.itemToShoppingCart(selector, nodeValue, index);
   }
-  $scope.viewItem = (e, index) => {
-    const nodeValue = e.currentTarget.attributes[0].nodeValue;
-    animate.viewItem(nodeValue);
+  $scope.currentGalleryImg = (e, index) => {
+    $rootScope.nodeValue = e.currentTarget.attributes[0].nodeValue;
+    $rootScope.currentIndex = index;
+    $rootScope.currentImgEvent = e;
+    navigate.currentGalleryImg(true);
   }
   $scope.removeFromCart = (index) => {
     $scope.cartItems.splice(index, 1);
@@ -65,6 +67,12 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
   $scope.hideBigView = () => {
     $('.shoppingCartBigView').hide();
   }
+  $scope.galleryLeftClick = () => {
+    navigate.galleryLeftClick();
+  }
+  $scope.galleryRightClick = () => {
+    navigate.galleryRightClick();
+  }
   $rootScope.bind = true
   $rootScope.viewSlideShow = [];
   $rootScope.currentSlideImg;
@@ -72,29 +80,15 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
   $rootScope.cartQuantity = data.getCartLength();
   $rootScope.clickIt = true;
   $rootScope.trackItems = 0;
-  $rootScope.galleryImgBorderColor = 'red';
   $rootScope.dynamicClasses = 'borderRed';
+  $rootScope.currentImgEvent;
   task.init();
-
-//trying to tie a class to an html element to change the border-color
-
-
 }]);
 
-app.directive("tocart", function($rootScope) {
-  return {
-    template: '<div data={{$index}} disableclick class="addToCartBtn flexRow pointer" ng-click="moveToCart($event, $index)"><p data={{$index}} disableclick class="addToChartText" ng-click="moveToCart($event, $index)">ADD TO CART</p></div>'
-  }
-});
-
-app.directive("view", function($rootScope) {
-  return {
-    template: '<div data={{$index}} disableclick class="viewBtn flexRow pointer" ng-click="viewItem($event, $index)"><p data={{$index}} disableclick class="addToChartText" ng-click="viewItem($event, $index)">VIEW GALLERY</p></div>'
-  }
-});
-
 app.service('animate', function($rootScope, $timeout, data){
+  //animate the item to the shopping cart
   this.itemToShoppingCart = (selector, nodeValue, index) => {
+    $('.shoppingCartBigView').hide();
     $('.options').css('left', '100vw');
     $timeout(() => {
       $('.itemPreview').show();
@@ -147,11 +141,6 @@ app.service('animate', function($rootScope, $timeout, data){
       });
     }, 50);
   }
-  this.viewItem = (nodeValue) => {
-    $rootScope.viewSlideShow = products[nodeValue].imgSlideShow;
-    $rootScope.currentSlideImg = $rootScope.viewSlideShow[$rootScope.currentSlideImgNumber];
-    $('.shoppingCartBigView').show();
-  }
 });
 
 app.service('data', function($rootScope, $interval){
@@ -175,8 +164,57 @@ app.service('data', function($rootScope, $interval){
   }
 });
 
-app.service('task', function($rootScope, $timeout, data){
+app.service('task', function($rootScope, $interval, $timeout, data){
   this.init = () => {
     $('.shoppingCartBigView').hide();
+    this.populateImgsOnPage();
+  }
+  this.populateImgsOnPage = () => {
+    const imgLength = data.products.length;
+    let index = 0;
+    const imgFill = $interval(() => {
+      if(index === imgLength){
+        $interval.cancel(imgFill);
+      } else {
+        $('.itemImg[data=' + index + ']').css('opacity', 1).hide().fadeIn().css('left', 0);
+        index++
+      }
+    }, 200);
+  }
+});
+
+app.service('navigate', function($rootScope, $timeout, data, animate){
+  this.galleryLeftClick = () => {
+    $rootScope.currentSlideImgNumber--;
+    if($rootScope.currentSlideImgNumber < 0){
+      $rootScope.currentSlideImgNumber = $rootScope.viewSlideShow.length - 1;
+    }
+    this.currentGalleryImg(false);
+  }
+  this.galleryRightClick = () => {
+    $rootScope.currentSlideImgNumber++;
+    if($rootScope.currentSlideImgNumber === $rootScope.viewSlideShow.length){
+      $rootScope.currentSlideImgNumber = 0;
+    }
+    this.currentGalleryImg(false);
+  }
+  //controls the view of the gallery picture
+  this.currentGalleryImg = (isFromPage) => {
+    if(isFromPage){ $rootScope.currentSlideImgNumber = 0 }
+    $rootScope.viewSlideShow = products[$rootScope.nodeValue].imgSlideShow;
+    $rootScope.currentSlideImg = $rootScope.viewSlideShow[$rootScope.currentSlideImgNumber];
+    $('.shoppingCartBigView').show();
+  }
+});
+
+app.directive("tocart", function($rootScope) {
+  return {
+    template: '<div data={{$index}} disableclick class="addToCartBtn flexRow pointer" ng-click="moveToCart($event, $index)"><p data={{$index}} disableclick class="addToChartText" ng-click="moveToCart($event, $index)">ADD TO CART</p></div>'
+  }
+});
+
+app.directive("view", function($rootScope) {
+  return {
+    template: '<div data={{$index}} disableclick class="viewBtn flexRow pointer" ng-click="currentGalleryImg($event, $index)"><p data={{$index}} disableclick class="addToChartText" ng-click="currentGalleryImg($event, $index)">VIEW GALLERY</p></div>'
   }
 });

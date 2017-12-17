@@ -291,20 +291,17 @@ html {
   margin-top: 0.5em;
 }
 
-.itemPreview {
-  /*display: none;*/
-}
-
-/*.itemBox:hover {
-  box-shadow: 0px 11px 30px 0px rgba(0,0,0,0.75);
-  top: -1em;
-  position: relative;
-}*/
-
 .itemImage {
   background-color: #eee;
   height: 26em;
   width: 18em;
+}
+
+.itemImg {
+  opacity: 0;
+  position: relative;
+  left: -2em;
+  transition: left 0.5s;
 }
 
 .fullBackground {
@@ -355,8 +352,8 @@ html {
 }
 
 .optionsScreen {
-  height: 26em;
   align-items: flex-start;
+  height: 26em;
   left: 0;
   padding-top: 7.6em;
   position: absolute;
@@ -417,7 +414,7 @@ html {
   z-index: 2;
 }
 
-.bigImgSection {
+.galleryImgSection {
   background-color: #fff;
   height: 100%;
   width: 60em;
@@ -443,30 +440,46 @@ html {
   font-size: 4em;
 }
 
-.bigImgSection img {
+.galleryImgSection img {
   height: 98%;
+  max-width: 90%;
 }
 
-.xBtnBigView {
+.galleryOptions {
+  height: 10em;
+  left: 90%;
+  position: absolute;
+  top: 4%;
+}
+
+.xBtnGalleryView,
+.addCartBtnGalleryView {
   background-color: #444;
   border-radius: 50%;
   color: #eee;
   height: 4em;
-  left: 90%;
+  margin-bottom: 1em;
   opacity: 0.4;
-  position: absolute;
-  top: 4%;
   width: 4em;
 }
 
-.xBtnBigView:hover {
+.xBtnGalleryView:hover,
+.addCartBtnGalleryView:hover {
   opacity: 1;
 }
 
-.xBtnBigView p {
+.xBtnGalleryView p {
   font-size: 4em;
   line-height: 0;
   margin: 0;
   position: relative;
   top: -4px;
+}
+
+.addCartBtnGalleryView {
+  background-color: #bbb;
+}
+
+.addCartBtnGalleryView img {
+  width: 2.4em;
 }

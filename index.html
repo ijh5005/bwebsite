@@ -12,12 +12,17 @@
     <div class="container">
 
       <!--        NAVIGATOIN         -->
-      <div class="navigationBar flexRow">
+      <div class="landingPage none">
+
+      </div>
+
+      <!--        NAVIGATOIN         -->
+      <div class="navigationBar flexRow ">
         <p ng-repeat="nav in navOptions" class="pointer">{{nav}}</p>
       </div>
 
       <!--        PAGEBODY         -->
-      <div class="pageBody flexRow">
+      <div class="pageBody flexRow ">
 
         <!--        SIDEBAR         -->
         <div class="sideBar flexRow">
@@ -88,7 +93,7 @@
           <div id={{$index}} class="itemBox flexCol" ng-class={{dynamicClasses}}  ng-repeat="product in products track by $index" ng-mouseover="showOptions($event)" ng-mouseleave="hideOptions($event)">
 
             <div id={{$index}} class="itemPreview">
-              <img data={{$index}} src={{product.img}} class="itemImage" alt="">
+              <img data={{$index}} src={{product.img}} class="itemImage itemImg" alt="">
               <div class="itemDesciption flexRow">
                 <div class="desciption flexCol">
                   <h2>{{product.name}}</h2>
@@ -127,15 +132,21 @@
 
     </div>
 
+    <!--        GALLERY         -->
     <div class="shoppingCartBigView flexRow">
       <div class="shadedArea" ng-click="hideBigView()"></div>
       <div class="bigView flexRow">
-        <div class="leftArrow flexRow"><p>&#x276E;</p></div>
-        <div class="bigImgSection flexRow">
+        <div class="leftArrow flexRow pointer" ng-click='galleryLeftClick()'><p>&#x276E;</p></div>
+        <div class="galleryImgSection flexRow">
           <img src={{currentSlideImg}} alt="">
         </div>
-        <div class="rightArrow flexRow"><p>&#x276F;</p></div>
-        <div class="xBtnBigView flexRow" ng-click="hideBigView()"><p>&#xd7;</p></div>
+        <div class="rightArrow flexRow pointer" ng-click='galleryRightClick()'><p>&#x276F;</p></div>
+        <div class="galleryOptions flexCol">
+          <div class="xBtnGalleryView flexRow pointer" ng-click="hideBigView()"><p>&#xd7;</p></div>
+          <div class="addCartBtnGalleryView flexRow pointer">
+            <img src="./images/shoppingBag.png" alt="" ng-click="moveToCart(currentImgEvent,currentIndex)">
+          </div>
+        </div>
       </div>
     </div>
 
