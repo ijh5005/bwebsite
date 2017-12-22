@@ -83,6 +83,23 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
   $rootScope.dynamicClasses = 'borderRed';
   $rootScope.currentImgEvent;
   task.init();
+
+  const popUp = () => {
+    $timeout(() => {
+      // $(".customPopUpGuide").removeClass('center');
+      $(".customPopUpGuide").animate({
+        top: 0,
+        left: 0
+      });
+      $timeout(() => {
+        $(".popUpPage").css('backgroundColor', 'transparent');
+        $timeout(() => {
+          $(".popUpPage").css('z-index', '-1');
+        }, 1000)
+      }, 1000)
+    }, 1000)
+  }
+  popUp();
 }]);
 
 app.service('animate', function($rootScope, $timeout, data){
@@ -168,6 +185,16 @@ app.service('task', function($rootScope, $interval, $timeout, data){
   this.init = () => {
     $('.shoppingCartBigView').hide();
     this.populateImgsOnPage();
+    let opacity = true;
+    $interval(() => {
+      if(opacity){
+        $('.customizeItems').css('opacity', '0.4');
+        opacity = !opacity;
+      } else {
+        $('.customizeItems').css('opacity', '1');
+        opacity = !opacity;
+      }
+    }, 1000);
   }
   this.populateImgsOnPage = () => {
     const imgLength = data.products.length;

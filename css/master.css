@@ -19,6 +19,7 @@ html {
 ::-webkit-scrollbar-thumb {
 	background-color: #000;
 }
+
 /*SCROLLBAR STYLNG END*/
 
 .flexRow {
@@ -48,6 +49,42 @@ html {
 .pageBody {
   height: 77vh;
   width: 100%;
+}
+
+/*POP UP PAGE*/
+.popUpPage {
+  align-items: flex-start;
+  background-color: #eee;
+  height: 100vh;
+  justify-content: flex-end;
+  left: 0;
+  opacity: 0.7;
+  position: absolute;
+  top: 0;
+  transition: background-color 0.5s;
+  width: 100vw;
+  z-index: 2;
+}
+
+.customPopUpGuide {
+  color: #444;
+  height: 4em;
+  margin-right: 6em;
+  margin-top: 4em;
+  position: relative;
+  top: 14em;
+  left: -14em;
+  width: 12em;
+  transition: top 0.5s, left 0.5s;
+}
+
+.customize {
+  height: 2em;
+}
+
+.customPopUpGuide p {
+  margin: 0;
+  margin-left: 6px;
 }
 
 /*NAVIGATION BAR*/
@@ -298,9 +335,9 @@ html {
 }
 
 .itemImg {
+  left: -2em;
   opacity: 0;
   position: relative;
-  left: -2em;
   transition: left 0.5s;
 }
 
@@ -359,6 +396,23 @@ html {
   position: absolute;
   top: 0;
   width: 18em;
+}
+
+.clickIt {
+  position: relative;
+}
+
+.customizeItems {
+  height: 2em;
+  position: absolute;
+  top: 5%;
+  left: 80%;
+  opacity: 1;
+  transition: opacity 0.8s;
+}
+
+.customizeItems:hover {
+  opacity: 1 !important;
 }
 
 .addToCartBtn,
