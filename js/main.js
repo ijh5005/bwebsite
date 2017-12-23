@@ -6,6 +6,7 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
 
   $scope.name = 'name';
   $scope.themeColor = '#ed7d7d';
+  $scope.themeBorderColor = '#fce9e9';
   $scope.products = data.products;
   $scope.cartItems = data.cartItems;
   $scope.filters = data.filters;
@@ -105,7 +106,7 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
 
   task.init($scope.themeColor);
   animate.customButton();
-  
+
 }]);
 
 app.service('animate', function($rootScope, $timeout, $interval, data, task){
