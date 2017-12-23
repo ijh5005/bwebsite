@@ -10,7 +10,7 @@
   <body class="flexCol" ng-app='app' ng-controller='ctrl' ng-cloak>
 
     <!--        LANDING PAGE         -->
-    <div class="landingPage flexRow none">
+    <div class="landingPage flexRow none" ng-if="currentPage === 'landingPage'">
       <div class="homePageContainer flexCol">
         <div class="topHomePage">
           <div class="homePageNav flexRow">
@@ -20,6 +20,9 @@
               <p class="pointer">Sign Up</p>
             </div>
           </div>
+          <div class="homeImg">
+            <img src="./images/model2.png" alt="">
+          </div>
         </div>
         <div class="bottomHomePage">
 
@@ -27,22 +30,25 @@
       </div>
     </div>
 
-    <div class="container ">
+    <div class="container" ng-if="(currentPage === 'brands') || (currentPage === 'products') || (currentPage === 'designers') || (currentPage === 'contact') || (currentPage === 'home')">
 
-      <!--        NAVIGATOIN         -->
-      <div class="navigationBar flexRow ">
+      <!--        NAVIGATOIN       -->
+      <div class="navigationBar flexRow">
         <div class="navHolder flexRow">
-          <p ng-repeat="nav in navOptions" class="pointer">{{nav}}</p>
+          <p data={{$index}} ng-repeat="nav in navOptions track by $index" class="navOptions pointer" ng-click='navigatePage($event)'>{{nav}}</p>
         </div>
         <div class="imgHolder flexRow">
-          <img class="customize pointer" src="./images/sewing.png" alt="">
+          <img class="customize customizeDirector pointer" src="./images/sewing.png" alt="" ng-mouseover="customMouseOver()" ng-mouseleave="customMouseLeave()">
           <p>click to customize</p>
           <img class="point" src="./images/point.png" alt="">
         </div>
       </div>
 
       <!--        PAGEBODY         -->
-      <div class="pageBody flexRow ">
+      <div class="pageBody hidden flexRow">
+
+        <!-- NAV SLIDER -->
+        <div class="navSlider"></div>
 
         <!--        SIDEBAR         -->
         <div class="sideBar flexRow">
@@ -57,7 +63,7 @@
               <!--        CART SECTION         -->
               <div class="cartItemsHolder">
                 <div id={{$index}} class="cartItem flexRow" ng-repeat="cartItem in cartItems track by $index">
-                  <img src={{cartItem.img}} alt="">
+                  <img ng-if={{cartItem}} src={{cartItem.img}} alt="">
                   <div class="cartItemDescriptionSection">
                     <h2 class="cartItemDescription">{{cartItem.name}}</h2>
                     <h2 class="cartItemPrice">{{cartItem.price}}</h2>
@@ -109,7 +115,7 @@
         </div>
 
         <!--        ITEM SECTION         -->
-        <div class="itemSection flexRow">
+        <div class="itemSection flexRow" ng-if="currentPage === 'brands'">
           <div id={{$index}} class="itemBox flexCol" ng-class={{dynamicClasses}}  ng-repeat="product in products track by $index" ng-mouseover="showOptions($event)" ng-mouseleave="hideOptions($event)">
 
             <div id={{$index}} class="itemPreview">
@@ -149,7 +155,23 @@
           </div>
         </div>
 
+        <!--       HOME         -->
+        <div class="itemSection flexRow"  ng-if="currentPage === 'home'">
+          <h1>HOME</h1>
+        </div>
+
+        <!--       DESIGNERS         -->
+        <div class="itemSection flexRow"  ng-if="currentPage === 'designers'">
+          <h1>DESIGNERS</h1>
+        </div>
+
+        <!--       CONTACT US        -->
+        <div class="itemSection flexRow"  ng-if="currentPage === 'contact'">
+          <h1>CONTACT US</h1>
+        </div>
+
       </div>
+
 
     </div>
 
@@ -170,6 +192,17 @@
         </div>
       </div>
     </div>
+
+
+
+    <style type="text/css">
+    ::-webkit-scrollbar-thumb { background-color: {{themeColor}}; }
+    .navSlider { background-color: {{themeColor}}; }
+    .itemNumber { background-color: {{themeColor}}; }
+    .itemPriceSection { color: {{themeColor}}; }
+    .cartItemPrice { color: {{themeColor}}; }
+    .topHomePage { background-color: {{themeColor}}; }
+    </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>

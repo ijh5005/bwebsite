@@ -3,11 +3,14 @@
 var app = angular.module('app', []);
 
 app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animate', 'data', 'task', 'navigate', function($scope, $rootScope, $interval, $timeout, animate, data, task, navigate){
+
   $scope.name = 'name';
+  $scope.themeColor = '#ed7d7d';
   $scope.products = data.products;
   $scope.cartItems = data.cartItems;
   $scope.filters = data.filters;
   $scope.navOptions = data.navOptions;
+
   $scope.showOptions = (e) => {
     const id = parseInt(e.currentTarget.id);
     $rootScope.currentItem = id;
@@ -40,13 +43,13 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
   }
   $scope.hideOptions = (e) => {
     const id = parseInt(e.currentTarget.id);
-    $('.options .itemDesciption').animate({ top: '100%' }, {
-                                            duration: 5,
-                                            complete: () => {
-                                              $('.options[id='+ id + ']').css('left', '100vw');
-                                              $('.itemPreview[id='+ id + ']').show();
-                                            }
-    });
+    const complete = () => {
+      $('.options[id='+ id + ']').css('left', '100vw');
+      $('.itemPreview[id='+ id + ']').show();
+    }
+    const animation = { top: '100%' };
+    const options = { duration: 0, complete };
+    $('.options .itemDesciption').animate(animation, options);
   }
   $scope.moveToCart = (e, index) => {
     $rootScope.trackItems++;
@@ -74,7 +77,22 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
   $scope.galleryRightClick = () => {
     navigate.galleryRightClick();
   }
-  $rootScope.bind = true
+  $scope.navigatePage = (e) => {
+    const pageClick = e.target.innerText.toLowerCase();
+    if(pageClick != $rootScope.currentPage){
+      $('.navOptions').css('color', '#000');
+      animate.navigatePage(e, pageClick, $scope.themeColor);
+    }
+  }
+  $scope.customMouseOver = () => {
+    $('.imgHolder p').css('opacity', 1);
+  }
+  $scope.customMouseLeave = () => {
+    $('.imgHolder p').css('opacity', 0);
+  }
+
+  $rootScope.bind = true;
+  $rootScope.currentPage = "brands";
   $rootScope.viewSlideShow = [];
   $rootScope.currentSlideImg;
   $rootScope.currentSlideImgNumber = 0;
@@ -84,11 +102,13 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
   $rootScope.dynamicClasses = 'borderRed';
   $rootScope.currentImgEvent;
   $rootScope.currentItem;
-  task.init();
+
+  task.init($scope.themeColor);
   animate.customButton();
+  
 }]);
 
-app.service('animate', function($rootScope, $timeout, $interval, data){
+app.service('animate', function($rootScope, $timeout, $interval, data, task){
   //animate the item to the shopping cart
   this.itemToShoppingCart = (selector, nodeValue, index) => {
     $('.shoppingCartBigView').hide();
@@ -103,45 +123,44 @@ app.service('animate', function($rootScope, $timeout, $interval, data){
 
       const height = '1.6em';
       const width = '1.2em';
-      const top = cartPostion.top + 50;
+
+      //if the shopping cart drop needs adjustments chang the dx and dy
+      const dx = 94;
+      const dy = 120;
+
+      const left = cartPostion.left + dx;
+      const top = cartPostion.top + dy;
+
       const inBag = top + 20;
-      const left = cartPostion.left + 8;
 
       const selfPosition = $selector.position();
 
       $clone.css('position', 'absolute')
-               .css('top', selfPosition.top)
-               .css('left', selfPosition.left)
-               .css('height', '27.4em')
-               .addClass('fullBackground')
-               .css('backgroundImage', 'url(' + data.products[nodeValue].img + ')');
+            .css('top', selfPosition.top)
+            .css('left', selfPosition.left)
+            .css('height', '27.4em')
+            .addClass('fullBackground')
+            .css('backgroundImage', 'url(' + data.products[nodeValue].img + ')');
 
-      $clone.animate({
-        left: left,
-        top: top,
-        height: height,
-        width: width
-      }, {
-        duration: 1000,
-        complete: () => {
-          $clone.css('zIndex', -1);
-          $clone.animate({
-            top: inBag,
-            opacity: 0
-          })
+      const animation = { left: left, top: top, height: height, width: width }
+      const animation2 = { top: inBag, opacity: 0 }
+      const complete = () => {
+        $clone.css('zIndex', -1);
+        $clone.animate(animation2)
 
-          const selectedItem = data.products[index];
+        const selectedItem = data.products[index];
 
-          //timeout updates the DOM
-          $timeout(() => {
-            $rootScope.clickIt = true;
-            $rootScope.clickable = null;
-            if($rootScope.trackItems > data.cartItems.length){
-              data.cartItems.splice(0, 0, selectedItem);
-            }
-          }, 10);
-        }
-      });
+        //timeout updates the DOM
+        $timeout(() => {
+          $rootScope.clickIt = true;
+          $rootScope.clickable = null;
+          if($rootScope.trackItems > data.cartItems.length){
+            data.cartItems.splice(0, 0, selectedItem);
+          }
+        }, 10);
+      }
+      const options = { duration: 1000, complete }
+      $clone.animate(animation, options);
     }, 50);
   }
   this.customButton = () => {
@@ -168,6 +187,27 @@ app.service('animate', function($rootScope, $timeout, $interval, data){
     //   $(".imgHolder").animate(animation, options);
     // }, 1000)
   }
+  this.navigatePage = (e, pageClick, themeColor) => {
+    if(!$rootScope.navigating){
+      $rootScope.navigating = true;
+      $('.navSlider').addClass('transitionLeft').css('left', '0%');
+      $timeout(() => {
+        $rootScope.currentPage = pageClick;
+        if($rootScope.currentPage === 'brands'){ task.populateImgsOnPage(); }
+
+        const data = parseInt(e.target.attributes["0"].nodeValue);
+        const thisNav = $('.navOptions[data=' + data + ']');
+        $('.navOptions').css('color', '#000');
+        thisNav.css('color', themeColor);
+
+        $('.navSlider').css('left', '-100%');
+        $timeout(() => {
+          $rootScope.navigating = false;
+          $('.navSlider').removeClass('transitionLeft').css('left', '100%');
+        }, 800);
+      }, 800);
+    }
+  }
 });
 
 app.service('data', function($rootScope, $interval){
@@ -192,7 +232,7 @@ app.service('data', function($rootScope, $interval){
 });
 
 app.service('task', function($rootScope, $interval, $timeout, data){
-  this.init = () => {
+  this.init = (themeColor) => {
     $('.shoppingCartBigView').hide();
     this.populateImgsOnPage();
     let opacity = true;
@@ -205,12 +245,8 @@ app.service('task', function($rootScope, $interval, $timeout, data){
         opacity = !opacity;
       }
     }, 1000);
-    $('.customize').mouseover(() => {
-      $('.imgHolder p').css('opacity', 1)
-    });
-    $('.customize').mouseleave(() => {
-      $('.imgHolder p').css('opacity', 0)
-    })
+
+    $timeout(() => { $('.navOptions[data=1]').css('color', themeColor) });
   }
   this.populateImgsOnPage = () => {
     const imgLength = data.products.length;
@@ -226,7 +262,7 @@ app.service('task', function($rootScope, $interval, $timeout, data){
   }
 });
 
-app.service('navigate', function($rootScope, $timeout, data, animate){
+app.service('navigate', function($rootScope, $timeout, data, animate, task){
   this.galleryLeftClick = () => {
     $rootScope.currentSlideImgNumber--;
     if($rootScope.currentSlideImgNumber < 0){
