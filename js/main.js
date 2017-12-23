@@ -88,7 +88,7 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
   animate.customButton();
 }]);
 
-app.service('animate', function($rootScope, $timeout, data){
+app.service('animate', function($rootScope, $timeout, $interval, data){
   //animate the item to the shopping cart
   this.itemToShoppingCart = (selector, nodeValue, index) => {
     $('.shoppingCartBigView').hide();
@@ -145,15 +145,28 @@ app.service('animate', function($rootScope, $timeout, data){
     }, 50);
   }
   this.customButton = () => {
-    $timeout(() => {
-      const animation = { top: '10%', left: '90%', height: '2em' };
-      const complete = () => {
-        $('.pageBody').animate({ opacity: 1 });
-        $('.imgHolder').css('width', '12em');
-      };
-      const options = { duration: 1000, complete }
-      $(".imgHolder").animate(animation, options);
-    }, 1000)
+    let count = 0;
+    let position = '-4em';
+    const pointCustom = $interval(() => {
+      if(count === 10){
+        $interval.cancel(pointCustom);
+        $('.point').fadeOut();
+      } else {
+        $('.point').css('top', position);
+        if(position === '-4em'){ position = '-3em'; }
+        else { position = '-4em'; }
+        count++;
+      }
+    }, 500);
+    // $timeout(() => {
+    //   const animation = { top: '10%', left: '90%', height: '2em' };
+    //   const complete = () => {
+    //     $('.pageBody').animate({ opacity: 1 });
+    //     $('.imgHolder').css('width', '12em');
+    //   };
+    //   const options = { duration: 1000, complete }
+    //   $(".imgHolder").animate(animation, options);
+    // }, 1000)
   }
 });
 

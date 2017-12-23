@@ -17,7 +17,7 @@ body {
 
 /*SCROLLBAR STYLNG*/
 ::-webkit-scrollbar {
-	width: 0px;
+	width: 2px;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -51,7 +51,6 @@ body {
 
 .pageBody {
   height: 77vh;
-  opacity: 0.4;
   width: 100%;
 }
 
@@ -127,10 +126,10 @@ body {
 }
 
 .imgHolder {
-  height: 12em;
+  height: 2em;
   position: absolute;
-  top: 40%;
-  left: 45%;
+  top: 10%;
+  left: 90%;
   z-index: 6;
 }
 
@@ -148,6 +147,15 @@ body {
 .customize {
   height: 100%;
   margin-right: 2em;
+}
+
+.point {
+  height: 100%;
+  position: relative;
+  left: -14em;
+  top: -3em;
+  transform: rotateZ(180deg);
+  transition: top 0.5s;
 }
 
 /**********SIDE BAR**********/
