@@ -63,7 +63,7 @@
               <!--        CART SECTION         -->
               <div class="cartItemsHolder">
                 <div id={{$index}} class="cartItem flexRow" ng-repeat="cartItem in cartItems track by $index">
-                  <img ng-if={{cartItem}} src={{cartItem.img}} alt="">
+                  <img src={{cartItem.img}} alt="">
                   <div class="cartItemDescriptionSection">
                     <h2 class="cartItemDescription">{{cartItem.name}}</h2>
                     <h2 class="cartItemPrice">{{cartItem.price}}</h2>
