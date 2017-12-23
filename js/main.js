@@ -10,6 +10,7 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
   $scope.navOptions = data.navOptions;
   $scope.showOptions = (e) => {
     const id = parseInt(e.currentTarget.id);
+    $rootScope.currentItem = id;
     $('.itemPreview[id='+ id + ']').hide();
     $('.options[id='+ id + ']').css('left', 0);
     $('.options .itemDesciption').animate({ top: '60%' }, 100);
@@ -82,24 +83,9 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
   $rootScope.trackItems = 0;
   $rootScope.dynamicClasses = 'borderRed';
   $rootScope.currentImgEvent;
+  $rootScope.currentItem;
   task.init();
-
-  const popUp = () => {
-    $timeout(() => {
-      // $(".customPopUpGuide").removeClass('center');
-      $(".customPopUpGuide").animate({
-        top: 0,
-        left: 0
-      });
-      $timeout(() => {
-        $(".popUpPage").css('backgroundColor', 'transparent');
-        $timeout(() => {
-          $(".popUpPage").css('z-index', '-1');
-        }, 1000)
-      }, 1000)
-    }, 1000)
-  }
-  popUp();
+  animate.customButton();
 }]);
 
 app.service('animate', function($rootScope, $timeout, data){
@@ -158,6 +144,17 @@ app.service('animate', function($rootScope, $timeout, data){
       });
     }, 50);
   }
+  this.customButton = () => {
+    $timeout(() => {
+      const animation = { top: '10%', left: '90%', height: '2em' };
+      const complete = () => {
+        $('.pageBody').animate({ opacity: 1 });
+        $('.imgHolder').css('width', '12em');
+      };
+      const options = { duration: 1000, complete }
+      $(".imgHolder").animate(animation, options);
+    }, 1000)
+  }
 });
 
 app.service('data', function($rootScope, $interval){
@@ -195,6 +192,12 @@ app.service('task', function($rootScope, $interval, $timeout, data){
         opacity = !opacity;
       }
     }, 1000);
+    $('.customize').mouseover(() => {
+      $('.imgHolder p').css('opacity', 1)
+    });
+    $('.customize').mouseleave(() => {
+      $('.imgHolder p').css('opacity', 0)
+    })
   }
   this.populateImgsOnPage = () => {
     const imgLength = data.products.length;
@@ -228,6 +231,7 @@ app.service('navigate', function($rootScope, $timeout, data, animate){
   //controls the view of the gallery picture
   this.currentGalleryImg = (isFromPage) => {
     if(isFromPage){ $rootScope.currentSlideImgNumber = 0 }
+    $rootScope.currentItem = $rootScope.nodeValue;
     $rootScope.viewSlideShow = products[$rootScope.nodeValue].imgSlideShow;
     $rootScope.currentSlideImg = $rootScope.viewSlideShow[$rootScope.currentSlideImgNumber];
     $('.shoppingCartBigView').show();

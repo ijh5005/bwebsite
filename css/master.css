@@ -7,6 +7,10 @@ html {
   width: 100vw;
 }
 
+body {
+  overflow: hidden;
+}
+
 .none {
   display: none !important;
 }
@@ -45,46 +49,58 @@ html {
   user-select: none;
 }
 
-
 .pageBody {
   height: 77vh;
+  opacity: 0.4;
   width: 100%;
 }
 
-/*POP UP PAGE*/
-.popUpPage {
-  align-items: flex-start;
-  background-color: #eee;
+/*LANDING PAGE*/
+
+.landingPage {
+  color: #fff;
   height: 100vh;
-  justify-content: flex-end;
-  left: 0;
-  opacity: 0.7;
-  position: absolute;
-  top: 0;
-  transition: background-color 0.5s;
   width: 100vw;
-  z-index: 2;
 }
 
-.customPopUpGuide {
-  color: #444;
-  height: 4em;
-  margin-right: 6em;
-  margin-top: 4em;
-  position: relative;
-  top: 14em;
-  left: -14em;
-  width: 12em;
-  transition: top 0.5s, left 0.5s;
+.homePageContainer {
+  background-image: url("../images/model2.png");
+  background-position: 0;
+  background-repeat: no-repeat;
+  height: 80%;
+  width: 80%;
 }
 
-.customize {
+.topHomePage {
+  background-color: #ff1000;
+  height: 90%;
+  opacity: 0.6;
+  width: 100%;
+}
+
+.bottomHomePage {
+  height: 20%;
+  width: 100%;
+}
+
+.homePageNav {
+  width: 100%;
+  height: 5em;
+  justify-content: space-between;
+}
+
+.hamburgerMenu {
+  background-image: url('../images/hamburger.png');
+  background-size: 100% 100%;
   height: 2em;
+  margin-left: 4em;
+  width: 2em;
 }
 
-.customPopUpGuide p {
-  margin: 0;
-  margin-left: 6px;
+.logInOrSignUp {
+  margin-right: 4em;
+  width: 6em;
+  justify-content: space-between;
 }
 
 /*NAVIGATION BAR*/
@@ -92,7 +108,7 @@ html {
 .navigationBar {
   border-bottom: 0.1em solid #f1f1f1;
   height: 8vh;
-  justify-content: flex-start;
+  justify-content: space-between;
   width: 100%;
 }
 
@@ -104,6 +120,34 @@ html {
 
 .navigationBar p:first-child {
   margin-left: 3em;
+}
+
+.navHolder {
+
+}
+
+.imgHolder {
+  height: 12em;
+  position: absolute;
+  top: 40%;
+  left: 45%;
+  z-index: 6;
+}
+
+.imgHolder p {
+  font-size: 0.8em;
+  position: relative;
+  left: -3em;
+  top: 1em;
+  opacity: 0;
+  width: 10em;
+  font-weight: 400;
+  transition: opacity 0.5s;
+}
+
+.customize {
+  height: 100%;
+  margin-right: 2em;
 }
 
 /**********SIDE BAR**********/
@@ -501,18 +545,18 @@ html {
 
 .galleryOptions {
   height: 10em;
-  left: 90%;
+  left: 86.6%;
   position: absolute;
-  top: 4%;
+  top: 14%;
+  width: 9em;
 }
 
 .xBtnGalleryView,
 .addCartBtnGalleryView {
-  background-color: #444;
   border-radius: 50%;
   color: #eee;
   height: 4em;
-  margin-bottom: 1em;
+  margin-bottom: 0.1em;
   opacity: 0.4;
   width: 4em;
 }
@@ -528,10 +572,6 @@ html {
   margin: 0;
   position: relative;
   top: -4px;
-}
-
-.addCartBtnGalleryView {
-  background-color: #bbb;
 }
 
 .addCartBtnGalleryView img {

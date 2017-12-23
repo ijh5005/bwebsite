@@ -9,24 +9,35 @@
   </head>
   <body class="flexCol" ng-app='app' ng-controller='ctrl' ng-cloak>
 
-    <div class="container">
+    <!--        LANDING PAGE         -->
+    <div class="landingPage flexRow none">
+      <div class="homePageContainer flexCol">
+        <div class="topHomePage">
+          <div class="homePageNav flexRow">
+            <div class="hamburgerMenu pointer"></div>
+            <div class="logInOrSignUp flexRow">
+              <p class="pointer">Log In</p>
+              <p class="pointer">Sign Up</p>
+            </div>
+          </div>
+        </div>
+        <div class="bottomHomePage">
 
-      <!--        POP UP         -->
-      <div class="popUpPage flexRow">
-        <div class="customPopUpGuide center flexRow">
-          <img class="customize" src="./images/sewing.png" alt="">
-          <p>click to customize</p>
         </div>
       </div>
+    </div>
 
-      <!--        NAVIGATOIN         -->
-      <div class="landingPage none">
-
-      </div>
+    <div class="container ">
 
       <!--        NAVIGATOIN         -->
       <div class="navigationBar flexRow ">
-        <p ng-repeat="nav in navOptions" class="pointer">{{nav}}</p>
+        <div class="navHolder flexRow">
+          <p ng-repeat="nav in navOptions" class="pointer">{{nav}}</p>
+        </div>
+        <div class="imgHolder flexRow">
+          <img class="customize pointer" src="./images/sewing.png" alt="">
+          <p>click to customize</p>
+        </div>
       </div>
 
       <!--        PAGEBODY         -->
