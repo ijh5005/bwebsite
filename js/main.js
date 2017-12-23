@@ -148,7 +148,7 @@ app.service('animate', function($rootScope, $timeout, $interval, data){
     let count = 0;
     let position = '-4em';
     const pointCustom = $interval(() => {
-      if(count === 10){
+      if(count === 20){
         $interval.cancel(pointCustom);
         $('.point').fadeOut();
       } else {
