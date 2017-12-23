@@ -179,7 +179,7 @@ body {
 }
 
 .sideBarOption h1 {
-  font-size: 1.4em;
+  font-size: 2em;
 }
 
 /*CART*/
@@ -190,6 +190,7 @@ body {
 }
 
 .cartItemHeading img {
+  margin: 0 1em;
   width: 2.4em;
 }
 
