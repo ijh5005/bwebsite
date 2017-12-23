@@ -148,7 +148,7 @@ body {
 
 .imgHolder {
   height: 2em;
-  left: 90%;
+  left: 89%;
   position: absolute;
   top: 10%;
   z-index: 6;
@@ -170,9 +170,15 @@ body {
   margin-right: 2em;
 }
 
+.customizeDirector {
+  background-color: #fff;
+  border-radius: 50%;
+  padding: 1em;
+}
+
 .point {
   height: 100%;
-  left: -14em;
+  left: -14.8em;
   position: relative;
   top: -3em;
   transform: rotateZ(180deg);
@@ -259,10 +265,6 @@ body {
 .xBtn p {
   font-size: 2em;
   margin: 0;
-}
-
-.xBtn p:hover {
-  color: #77f6d5;
 }
 
 .cartItem img {
@@ -461,7 +463,6 @@ body {
 }
 
 .optionsBgColor {
-  background-color: #77f6d5;
   height: 26em;
   left: 0;
   opacity: 0.8;
@@ -512,7 +513,6 @@ body {
 .addToCartBtn:hover,
 .viewBtn:hover {
   background-color: #fff;
-  color: #77f6d5;
   font-weight: bold;
 }
 
@@ -585,16 +585,17 @@ body {
   height: 10em;
   left: 86.6%;
   position: absolute;
-  top: 14%;
+  top: 16%;
   width: 9em;
 }
 
 .xBtnGalleryView,
 .addCartBtnGalleryView {
+  background-color: #fff;
   border-radius: 50%;
   color: #eee;
   height: 4em;
-  margin-bottom: 0.1em;
+  margin-bottom: 0.6em;
   opacity: 0.4;
   width: 4em;
 }
