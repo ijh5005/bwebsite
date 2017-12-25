@@ -6,6 +6,8 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
 
   $scope.name = 'name';
   $scope.themeColor = '#ed7d7d';
+  $scope.themeColorOne = '#ed7d7d';    //rgb(237, 125, 125)
+  $scope.themeColorTwo = '#5b94ef';    //rgb(91, 148, 239)
   $scope.themeBorderColor = '#fce9e9';
   $scope.inLargeView = false;
   $scope.products = data.products;
@@ -114,8 +116,10 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
   $rootScope.dynamicClasses = 'borderRed';
   $rootScope.currentImgEvent;
   $rootScope.currentItem;
+  $rootScope.landingPageAnimationInterval;
 
   task.init($scope.themeColor);
+  animate.landingPage();
   animate.customButton();
 
 }]);
@@ -219,6 +223,41 @@ app.service('animate', function($rootScope, $timeout, $interval, data, task){
         }, 800);
       }, 800);
     }
+  }
+  this.landingPage = () => {
+    const animationDuration = 500;
+    const intervalDuration = 4500;
+    $rootScope.landingPageAnimationInterval = $interval(() => {
+      const initialFirstPageColor = 'rgb(237, 125, 125)';
+      const initialSecondPageColor = 'rgb(91, 148, 239)';
+      const currentPageColor = $('.landingPageColorOne').css('backgroundColor');
+      const animation = { left: '0%' };
+      let switchedColor;
+      let currentColor;
+      let number;
+      const complete = () => {
+        $('.homeImg img').fadeIn(500).attr('src', './images/model' + number + '.png');
+        if(currentColor === 'firstColor'){ $('.landingPageColorOne').css('backgroundColor', initialSecondPageColor) }
+        else if(currentColor === 'secondColor'){ $('.landingPageColorOne').css('backgroundColor', initialFirstPageColor) }
+        $('.landingPageColorTwo').css('left', '100%').css('backgroundColor', switchedColor);
+      }
+      const options = { duration: animationDuration, complete: complete };
+      const startAnimation = (color, imgNumber) => {
+        currentColor = color;
+        number = imgNumber;
+        switchedColor = (color === 'firstColor') ? initialFirstPageColor : initialSecondPageColor;
+        $('.homeImg img').fadeOut(400);
+        $('.landingPageColorTwo').animate(animation, options);
+      }
+      if(currentPageColor === initialFirstPageColor){
+        startAnimation('firstColor', 1);
+      } else if(currentPageColor === initialSecondPageColor){
+        startAnimation('secondColor', 2);
+      }
+    }, intervalDuration)
+  }
+  this.cancelPageAnimations = () => {
+    $interval.cancel($rootScope.landingPageAnimationInterval);
   }
 });
 

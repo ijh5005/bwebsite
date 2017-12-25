@@ -83,12 +83,31 @@ body {
 
 .homePageContainer {
   height: 80%;
+  overflow: hidden;
   width: 80%;
 }
 
 .topHomePage {
   height: 90%;
+  position: relative;
   width: 100%;
+}
+
+.landingPageColorOne {
+
+}
+
+.landingPageColorTwo {
+  left: 100%;
+}
+
+.landingPageColorOne,
+.landingPageColorTwo {
+  height: 100%;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: -1;
 }
 
 .bottomHomePage {
@@ -117,10 +136,10 @@ body {
 }
 
 .homeImg img {
-  height: 35em;
+  height: 50em;
   opacity: 0.8;
   position: absolute;
-  top: 16em;
+  top: -4em;
 }
 
 /*NAVIGATION BAR*/

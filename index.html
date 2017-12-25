@@ -10,7 +10,7 @@
   <body class="flexCol" ng-app='app' ng-controller='ctrl' ng-cloak>
 
     <!--        LANDING PAGE         -->
-    <div class="landingPage flexRow none" ng-if="currentPage === 'landingPage'">
+    <div class="landingPage flexRow" ng-if="currentPage === 'landingPage'">
       <div class="homePageContainer flexCol">
         <div class="topHomePage">
           <div class="homePageNav flexRow">
@@ -20,6 +20,8 @@
               <p class="pointer">Sign Up</p>
             </div>
           </div>
+          <div class="landingPageColorOne"></div>
+          <div class="landingPageColorTwo"></div>
           <div class="homeImg">
             <img src="./images/model2.png" alt="">
           </div>
@@ -199,9 +201,10 @@
     ::-webkit-scrollbar-thumb { background-color: {{themeColor}}; }
     .navSlider { background-color: {{themeColor}}; }
     .itemNumber { background-color: {{themeColor}}; }
+    .landingPageColorOne { background-color: {{themeColorOne}}; }
+    .landingPageColorTwo { background-color: {{themeColorTwo}};}
     .itemPriceSection { color: {{themeColor}}; }
     .cartItemPrice { color: {{themeColor}}; }
-    .topHomePage { background-color: {{themeColor}}; }
     .navigationBar { border-bottom: 0.1em solid {{themeBorderColor}}; }
     .sideBar { border-right: 0.1em solid {{themeBorderColor}}; }
     .optionsBgColor { background-color: {{themeColor}}; }
