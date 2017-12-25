@@ -16,14 +16,14 @@
           <div class="homePageNav flexRow">
             <div class="hamburgerMenu pointer"></div>
             <div class="logInOrSignUp flexRow">
-              <p class="pointer">Log In</p>
+              <p class="pointer" ng-click='logIn()'>Log In</p>
               <p class="pointer">Sign Up</p>
             </div>
           </div>
           <div class="landingPageColorOne"></div>
           <div class="landingPageColorTwo"></div>
           <div class="homeImg">
-            <img src="./images/model2.png" alt="">
+            <img src="./images/model1.png" alt="">
           </div>
         </div>
         <div class="bottomHomePage">
@@ -31,6 +31,9 @@
         </div>
       </div>
     </div>
+
+    <!-- HOME NAV SLIDER -->
+    <div class="homeNavSlider"></div>
 
     <div class="container" ng-if="(currentPage === 'brands') || (currentPage === 'products') || (currentPage === 'designers') || (currentPage === 'contact') || (currentPage === 'home')">
 
@@ -198,18 +201,34 @@
 
 
     <style type="text/css">
-    ::-webkit-scrollbar-thumb { background-color: {{themeColor}}; }
-    .navSlider { background-color: {{themeColor}}; }
-    .itemNumber { background-color: {{themeColor}}; }
-    .landingPageColorOne { background-color: {{themeColorOne}}; }
-    .landingPageColorTwo { background-color: {{themeColorTwo}};}
-    .itemPriceSection { color: {{themeColor}}; }
-    .cartItemPrice { color: {{themeColor}}; }
-    .navigationBar { border-bottom: 0.1em solid {{themeBorderColor}}; }
-    .sideBar { border-right: 0.1em solid {{themeBorderColor}}; }
+    ::-webkit-scrollbar-thumb,
+    .navSlider,
+    .homeNavSlider,
+    .itemNumber,
     .optionsBgColor { background-color: {{themeColor}}; }
-    .addToCartBtn:hover, .viewBtn:hover, .xBtn p:hover { color: {{themeColor}}; }
-    .imgHolder p { color: {{themeColor}}; }
+
+    .landingPageColorOne { background-color: {{themeColorOne}}; }
+
+    .landingPageColorTwo { background-color: {{themeColorTwo}};}
+
+    .itemPriceSection,
+    .cartItemPrice,
+    .addToCartBtn:hover,
+    .viewBtn:hover,
+    .xBtn p:hover,
+    .imgHolder p ,
+    .navOptions[data="1"] { color: {{themeColor}}; }
+
+    .navigationBar { border-bottom: 0.1em solid {{themeBorderColor}}; }
+
+    .sideBar { border-right: 0.1em solid {{themeBorderColor}}; }
+
+    .checkBoxChecked {
+      background-color: {{themeColorOne}};
+      border-color: {{themeColorOne}};
+    }
+
+    .colorCircleSelected { border: 4px solid #777; }
     </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

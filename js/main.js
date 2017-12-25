@@ -104,9 +104,12 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
         $('.customizeDirector').css('opacity', 0.4);
     }
   }
+  $scope.logIn = () => {
+    animate.logIn($scope.themeColor);
+  }
 
   $rootScope.bind = true;
-  $rootScope.currentPage = "brands";
+  $rootScope.currentPage = "landingPage";
   $rootScope.viewSlideShow = [];
   $rootScope.currentSlideImg;
   $rootScope.currentSlideImgNumber = 0;
@@ -125,6 +128,20 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
 }]);
 
 app.service('animate', function($rootScope, $timeout, $interval, data, task){
+  this.logIn = (themeColor) => {
+    $('.homeNavSlider').addClass('transitionLeft').css('left', '0%');
+    $timeout(() => {
+      this.cancelPageAnimations();
+      $rootScope.currentPage = 'brands';
+      task.init();
+      this.customButton();
+      const thisNav = $('.navOptions');
+      debugger
+      thisNav.css('color', themeColor);
+      $('.homeNavSlider').css('left', '-100%');
+      $timeout(() => { $('.homeNavSlider').removeClass('transitionLeft').css('left', '100%'); }, 800);
+    }, 800);
+  }
   //animate the item to the shopping cart
   this.itemToShoppingCart = (selector, nodeValue, index) => {
     $('.shoppingCartBigView').hide();
@@ -205,10 +222,16 @@ app.service('animate', function($rootScope, $timeout, $interval, data, task){
   }
   this.navigatePage = (e, pageClick, themeColor) => {
     if(!$rootScope.navigating){
+      const isHomePage = pageClick === 'home';
+      const selector = isHomePage ? '.homeNavSlider' : '.navSlider';
       $rootScope.navigating = true;
-      $('.navSlider').addClass('transitionLeft').css('left', '0%');
+      $(selector).addClass('transitionLeft').css('left', '0%');
       $timeout(() => {
-        $rootScope.currentPage = pageClick;
+        if(isHomePage){
+          this.landingPage();
+          $rootScope.currentPage = 'landingPage';
+        }
+        else { $rootScope.currentPage = pageClick; }
         if($rootScope.currentPage === 'brands'){ task.populateImgsOnPage(); }
 
         const data = parseInt(e.target.attributes["0"].nodeValue);
@@ -216,10 +239,10 @@ app.service('animate', function($rootScope, $timeout, $interval, data, task){
         $('.navOptions').css('color', '#000');
         thisNav.css('color', themeColor);
 
-        $('.navSlider').css('left', '-100%');
+        $(selector).css('left', '-100%');
         $timeout(() => {
           $rootScope.navigating = false;
-          $('.navSlider').removeClass('transitionLeft').css('left', '100%');
+          $(selector).removeClass('transitionLeft').css('left', '100%');
         }, 800);
       }, 800);
     }
@@ -250,9 +273,9 @@ app.service('animate', function($rootScope, $timeout, $interval, data, task){
         $('.landingPageColorTwo').animate(animation, options);
       }
       if(currentPageColor === initialFirstPageColor){
-        startAnimation('firstColor', 1);
+        startAnimation('firstColor', 2);
       } else if(currentPageColor === initialSecondPageColor){
-        startAnimation('secondColor', 2);
+        startAnimation('secondColor', 1);
       }
     }, intervalDuration)
   }
@@ -297,7 +320,7 @@ app.service('task', function($rootScope, $interval, $timeout, data){
       }
     }, 1000);
 
-    $timeout(() => { $('.navOptions[data=1]').css('color', themeColor) });
+    // $timeout(() => { $('.navOptions[data=1]').css('color', themeColor) });
   }
   this.populateImgsOnPage = () => {
     const imgLength = data.products.length;
