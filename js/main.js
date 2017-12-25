@@ -136,7 +136,6 @@ app.service('animate', function($rootScope, $timeout, $interval, data, task){
       task.init();
       this.customButton();
       const thisNav = $('.navOptions');
-      debugger
       thisNav.css('color', themeColor);
       $('.homeNavSlider').css('left', '-100%');
       $timeout(() => { $('.homeNavSlider').removeClass('transitionLeft').css('left', '100%'); }, 800);
@@ -232,7 +231,12 @@ app.service('animate', function($rootScope, $timeout, $interval, data, task){
           $rootScope.currentPage = 'landingPage';
         }
         else { $rootScope.currentPage = pageClick; }
-        if($rootScope.currentPage === 'brands'){ task.populateImgsOnPage(); }
+        if($rootScope.currentPage === 'brands'){
+          $('.cartItemsHolder').css('maxHeight', '26em');
+          task.populateImgsOnPage();
+        } else {
+          $('.cartItemsHolder').css('maxHeight', '45em');
+        }
 
         const data = parseInt(e.target.attributes["0"].nodeValue);
         const thisNav = $('.navOptions[data=' + data + ']');

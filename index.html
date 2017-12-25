@@ -80,7 +80,7 @@
             </div>
 
             <!--        CATEGORIES         -->
-            <div class="sideBarOption flexCol categories">
+            <div class="sideBarOption flexCol categories" ng-if="currentPage === 'brands'">
               <h1>CATEGORIES</h1>
 
               <div class="categoriesFilter flexRow" ng-repeat="category in filters.categories track by $index">
@@ -91,7 +91,7 @@
             </div>
 
             <!--        COLORS         -->
-            <div class="sideBarOption flexCol colors">
+            <div class="sideBarOption flexCol colors" ng-if="currentPage === 'brands'">
               <h1>COLORS</h1>
               <div class="colorSection flexRow">
 
@@ -104,7 +104,7 @@
             </div>
 
             <!--        SIZES         -->
-            <!-- <div class="sideBarOption flexCol sizes">
+            <!-- <div class="sideBarOption flexCol sizes" ng-if="currentPage === 'brands'">
               <h1>SIZES</h1>
               <div class="sideBarSection flexRow">
 
