@@ -1,4 +1,4 @@
-const products = [
+const sew_products = [
   {
     name: 'DROP DEAD RED SHOES',
     price: '$38',

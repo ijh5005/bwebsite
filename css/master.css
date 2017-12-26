@@ -85,13 +85,33 @@ body {
 .homePageContainer {
   height: 80%;
   overflow: hidden;
-  width: 80%;
+  width: 69%;
 }
 
 .topHomePage {
+  align-items: flex-end;
   height: 90%;
   position: relative;
   width: 100%;
+}
+
+.landingPageButtonSection {
+  height: 5em;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.lpBtn {
+  height: 5em;
+  transition: height 0.25s, width 0.25s, background-color 0.5s;
+  width: 12em;
+  z-index: 2;
+}
+
+.lpBtn:hover {
+  border: none;
+  height: 8em;
+  width: 14em;
 }
 
 .landingPageColorOne {
@@ -140,6 +160,12 @@ body {
 
 .logInOrSignUp p {
   font-size: 1.4em;
+}
+
+.homeImg {
+  left: -2em;
+  position: absolute;
+  top: -1em;
 }
 
 .homeImg img {

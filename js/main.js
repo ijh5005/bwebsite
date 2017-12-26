@@ -5,11 +5,8 @@ var app = angular.module('app', []);
 app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animate', 'data', 'task', 'navigate', function($scope, $rootScope, $interval, $timeout, animate, data, task, navigate){
 
   $scope.name = 'name';
-  $scope.themeColor = '#ed7d7d';
-  $scope.themeColorOne = '#ed7d7d';    //rgb(237, 125, 125)
-  $scope.themeColorTwo = '#5b94ef';    //rgb(91, 148, 239)
-  $scope.themeBorderColor = '#fce9e9';
   $scope.inLargeView = false;
+  $rootScope.customIcon = './images/sewing.png';
   $scope.products = data.products;
   $scope.cartItems = data.cartItems;
   $scope.filters = data.filters;
@@ -104,13 +101,27 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
         $('.customizeDirector').css('opacity', 0.4);
     }
   }
-  $scope.logIn = () => {
+  $scope.logIn = (productName) => {
+    task.setThemeColors(productName);
+    data.setProducts(productName);
     animate.logIn($scope.themeColor);
+    $scope.products = data.products;
+    $rootScope.productsSet = true;
   }
 
   $rootScope.bind = true;
+  $rootScope.isIntervalInProgress = false;
+  $rootScope.productsSet = false;
   $rootScope.currentPage = "landingPage";
+  $rootScope.landingPageBtnHoverColor = '#430909';
+  $rootScope.landingPageBtnColor = '#ea6262';
+  $rootScope.landingPageBtnBorderColor = '#e74b4b';
+  $rootScope.themeColor = '#ed7d7d';
+  $rootScope.themeColorOne = '#ed7d7d';    //rgb(237, 125, 125)
+  $rootScope.themeColorTwo = '#5b94ef';    //rgb(91, 148, 239)
+  $rootScope.themeBorderColor = '#fce9e9';
   $rootScope.viewSlideShow = [];
+  $rootScope.brands;
   $rootScope.currentSlideImg;
   $rootScope.currentSlideImgNumber = 0;
   $rootScope.cartQuantity = data.getCartLength();
@@ -227,6 +238,9 @@ app.service('animate', function($rootScope, $timeout, $interval, data, task){
       $(selector).addClass('transitionLeft').css('left', '0%');
       $timeout(() => {
         if(isHomePage){
+          $rootScope.landingPageBtnHoverColor = '#430909';
+          $rootScope.landingPageBtnColor = '#ea6262';
+          $rootScope.productsSet = false;
           this.landingPage();
           $rootScope.currentPage = 'landingPage';
         }
@@ -255,32 +269,67 @@ app.service('animate', function($rootScope, $timeout, $interval, data, task){
     const animationDuration = 500;
     const intervalDuration = 4500;
     $rootScope.landingPageAnimationInterval = $interval(() => {
+
+      //check to see if the interval has finished completing before starting another one
+      if($rootScope.isIntervalInProgress){ return false }
+      $rootScope.isIntervalInProgress = true;
+
       const initialFirstPageColor = 'rgb(237, 125, 125)';
       const initialSecondPageColor = 'rgb(91, 148, 239)';
+      const initialThirdPageColor = 'rgb(153, 153, 153)';
       const currentPageColor = $('.landingPageColorOne').css('backgroundColor');
       const animation = { left: '0%' };
       let switchedColor;
       let currentColor;
       let number;
-      const complete = () => {
-        $('.homeImg img').fadeIn(500).attr('src', './images/model' + number + '.png');
-        if(currentColor === 'firstColor'){ $('.landingPageColorOne').css('backgroundColor', initialSecondPageColor) }
-        else if(currentColor === 'secondColor'){ $('.landingPageColorOne').css('backgroundColor', initialFirstPageColor) }
-        $('.landingPageColorTwo').css('left', '100%').css('backgroundColor', switchedColor);
+
+      //animation start function
+      const start = () => {
+        if(currentColor === 'firstColor'){
+          $rootScope.landingPageBtnHoverColor = '#0b3474';
+          $rootScope.landingPageBtnColor = '#4585ed';
+          // $rootScope.landingPageBtnBorderColor = '#4485ee';
+        } else if(currentColor === 'secondColor'){
+          $rootScope.landingPageBtnHoverColor = '#444';
+          $rootScope.landingPageBtnColor = '#777';
+          // $rootScope.landingPageBtnBorderColor = '#e74b4b';
+        } else if(currentColor === 'thirdColor'){
+          $rootScope.landingPageBtnHoverColor = '#430909';
+          $rootScope.landingPageBtnColor = '#ea6262';
+          // $rootScope.landingPageBtnBorderColor = '#e74b4b';
+        }
       }
-      const options = { duration: animationDuration, complete: complete };
+
+      //animation complete function
+      const complete = () => {
+        if(number != 3){ $('.homeImg img').fadeIn(500).attr('src', './images/model' + number + '.png'); }
+        if(currentColor === 'firstColor'){ $('.landingPageColorOne').css('backgroundColor', initialSecondPageColor); }
+        else if(currentColor === 'secondColor'){ $('.landingPageColorOne').css('backgroundColor', initialThirdPageColor); }
+        else if(currentColor === 'thirdColor'){ $('.landingPageColorOne').css('backgroundColor', initialFirstPageColor); }
+        $('.landingPageColorTwo').css('left', '100%').css('backgroundColor', switchedColor);
+        $rootScope.isIntervalInProgress = false;
+        // if(currentColor != 'secondColor'){ $rootScope.isIntervalInProgress = false; }
+      }
+
+      //animation options function
+      const options = { duration: animationDuration, start: start, complete: complete };
+
+      //start the animation
       const startAnimation = (color, imgNumber) => {
         currentColor = color;
         number = imgNumber;
-        switchedColor = (color === 'firstColor') ? initialFirstPageColor : initialSecondPageColor;
+        if(color === 'firstColor'){ switchedColor = initialThirdPageColor; }
+        else if(color === 'secondColor'){ switchedColor = initialFirstPageColor; }
+        else if(color === 'thirdColor'){ switchedColor = initialSecondPageColor; }
         $('.homeImg img').fadeOut(400);
         $('.landingPageColorTwo').animate(animation, options);
       }
-      if(currentPageColor === initialFirstPageColor){
-        startAnimation('firstColor', 2);
-      } else if(currentPageColor === initialSecondPageColor){
-        startAnimation('secondColor', 1);
-      }
+
+      //start the animation
+      if(currentPageColor === initialFirstPageColor){ startAnimation('firstColor', 2); }
+      else if(currentPageColor === initialSecondPageColor){ startAnimation('secondColor', 3); }
+      else if(currentPageColor === initialThirdPageColor){ startAnimation('thirdColor', 1); }
+
     }, intervalDuration)
   }
   this.cancelPageAnimations = () => {
@@ -288,10 +337,14 @@ app.service('animate', function($rootScope, $timeout, $interval, data, task){
   }
 });
 
-app.service('data', function($rootScope, $interval){
+app.service('data', function($rootScope, $interval, $timeout){
   this.navOptions = ['HOME', 'BRANDS', 'DESIGNERS', 'CONTACT'],
   this.cartItems = [],
-  this.products = products;           // this comes from database.js
+  this.products = sew_products;           // this comes from database.js
+  this.setProducts = (productName) => {
+    $rootScope.brands = productName;
+    this.products = ($rootScope.brands === 'sew_products') ? sew_products : crochet_products;
+  }
   this.getCartLength = () => {
     $interval(() => {
       $rootScope.cartQuantity = this.cartItems.length;
@@ -338,6 +391,19 @@ app.service('task', function($rootScope, $interval, $timeout, data){
       }
     }, 200);
   }
+  this.setThemeColors = (setThemeColors) => {
+    if(setThemeColors === "sew_products"){
+      $rootScope.customIcon = './images/sewing.png';
+      $rootScope.brands = 'sew_products';
+      $rootScope.themeColor = '#ed7d7d';
+      $rootScope.themeBorderColor = '#fce9e9';
+    } else if(setThemeColors === "crochet_products"){
+      $rootScope.customIcon = './images/crochet.png';
+      $rootScope.brands = 'crochet_products';
+      $rootScope.themeColor = '#5b94ef';
+      $rootScope.themeBorderColor = '#e8f0fd';
+    }
+  }
 });
 
 app.service('navigate', function($rootScope, $timeout, data, animate, task){
@@ -359,7 +425,8 @@ app.service('navigate', function($rootScope, $timeout, data, animate, task){
   this.showBigView = (isFromPage) => {
     if(isFromPage){ $rootScope.currentSlideImgNumber = 0 }
     $rootScope.currentItem = $rootScope.nodeValue;
-    $rootScope.viewSlideShow = products[$rootScope.nodeValue].imgSlideShow;
+    if($rootScope.brands === 'sew_products'){ $rootScope.viewSlideShow = sew_products[$rootScope.nodeValue].imgSlideShow; }
+    else if($rootScope.brands === 'crochet_products'){ $rootScope.viewSlideShow = crochet_products[$rootScope.nodeValue].imgSlideShow; }
     $rootScope.currentSlideImg = $rootScope.viewSlideShow[$rootScope.currentSlideImgNumber];
     $('.shoppingCartBigView').show();
   }

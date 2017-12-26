@@ -12,12 +12,20 @@
     <!--        LANDING PAGE         -->
     <div class="landingPage flexRow" ng-if="currentPage === 'landingPage'">
       <div class="homePageContainer flexCol">
-        <div class="topHomePage">
-          <div class="homePageNav flexRow">
+        <div class="topHomePage flexRow">
+          <!-- <div class="homePageNav flexRow">
             <div class="hamburgerMenu pointer"></div>
             <div class="logInOrSignUp flexRow">
               <p class="pointer" ng-click='logIn()'>Log In</p>
               <p class="pointer">Sign Up</p>
+            </div>
+          </div> -->
+          <div class="landingPageButtonSection flexRow">
+            <div class="landingPageBtns flexRow">
+              <div class="lpBtn flexRow brittanyPage" ng-click='logIn("sew_products")'><p>BRITTANY PAGE</p></div>
+              <div class="lpBtn flexRow brandiPage" ng-click='logIn("crochet_products")'><p>BRANDI PAGE</p></div>
+              <div class="lpBtn flexRow signUp"><p>SIGN UP</p></div>
+              <div class="lpBtn flexRow loginBtn" ng-click='logIn("brittany")'><p>LOG IN</p></div>
             </div>
           </div>
           <div class="landingPageColorOne"></div>
@@ -43,7 +51,7 @@
           <p data={{$index}} ng-repeat="nav in navOptions track by $index" class="navOptions pointer" ng-click='navigatePage($event)'>{{nav}}</p>
         </div>
         <div class="imgHolder flexRow">
-          <img class="customize customizeDirector pointer" src="./images/sewing.png" alt="" ng-mouseover="customMouseOver()" ng-mouseleave="customMouseLeave()">
+          <img class="customize customizeDirector pointer" src="{{customIcon}}" alt="" ng-mouseover="customMouseOver()" ng-mouseleave="customMouseLeave()">
           <p>click to customize</p>
           <img class="point" src="./images/point.png" alt="">
         </div>
@@ -121,7 +129,7 @@
 
         <!--        ITEM SECTION         -->
         <div class="itemSection flexRow" ng-if="currentPage === 'brands'">
-          <div id={{$index}} class="itemBox flexCol" ng-class={{dynamicClasses}}  ng-repeat="product in products track by $index" ng-mouseover="showOptions($event)" ng-mouseleave="hideOptions($event)">
+          <div id={{$index}} class="itemBox flexCol" ng-if="productsSet" ng-class={{dynamicClasses}}  ng-repeat="product in products track by $index" ng-mouseover="showOptions($event)" ng-mouseleave="hideOptions($event)">
 
             <div id={{$index}} class="itemPreview">
               <img data={{$index}} src={{product.img}} class="itemImage itemImg" alt="">
@@ -151,7 +159,7 @@
               <div class="optionsBgColor"></div>
               <div class="optionsScreen flexRow">
                 <div ng-if='clickIt'>
-                  <img class="customizeItems pointer" src="./images/sewing.png" alt="">
+                  <img class="customizeItems pointer" src={{customIcon}} alt="">
                   <div view class="pointer"></div>
                   <div tocart class="pointer"></div>
                 </div>
@@ -201,39 +209,43 @@
 
 
     <style type="text/css">
-    ::-webkit-scrollbar-thumb,
-    .navSlider,
-    .homeNavSlider,
-    .itemNumber,
-    .optionsBgColor { background-color: {{themeColor}}; }
+      ::-webkit-scrollbar-thumb,
+      .navSlider,
+      .homeNavSlider,
+      .itemNumber,
+      .optionsBgColor { background-color: {{themeColor}}; }
 
-    .landingPageColorOne { background-color: {{themeColorOne}}; }
+      .landingPageColorOne { background-color: {{themeColorOne}}; }
 
-    .landingPageColorTwo { background-color: {{themeColorTwo}};}
+      .landingPageColorTwo { background-color: {{themeColorTwo}};}
 
-    .itemPriceSection,
-    .cartItemPrice,
-    .addToCartBtn:hover,
-    .viewBtn:hover,
-    .xBtn p:hover,
-    .imgHolder p ,
-    .navOptions[data="1"] { color: {{themeColor}}; }
+      .itemPriceSection,
+      .cartItemPrice,
+      .addToCartBtn:hover,
+      .viewBtn:hover,
+      .xBtn p:hover,
+      .imgHolder p ,
+      .navOptions[data="1"] { color: {{themeColor}}; }
 
-    .navigationBar { border-bottom: 0.1em solid {{themeBorderColor}}; }
+      .navigationBar { border-bottom: 0.1em solid {{themeBorderColor}}; }
 
-    .sideBar { border-right: 0.1em solid {{themeBorderColor}}; }
+      .sideBar { border-right: 0.1em solid {{themeBorderColor}}; }
 
-    .checkBoxChecked {
-      background-color: {{themeColorOne}};
-      border-color: {{themeColorOne}};
-    }
+      .checkBoxChecked {
+        background-color: {{themeColor}};
+        border-color: {{themeColor}};
+      }
 
-    .colorCircleSelected { border: 4px solid #777; }
+      .colorCircleSelected { border: 4px solid #777; }
+
+      .lpBtn:hover { background-color: {{landingPageBtnHoverColor}}; }
+      .lpBtn { background-color: {{landingPageBtnColor}}; }
     </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-    <script type="text/javascript" src="./js/database.js"></script>
+    <script type="text/javascript" src="./js/databaseBrittany.js"></script>
+    <script type="text/javascript" src="./js/databaseBrandi.js"></script>
     <script type="text/javascript" src="./js/main.js"></script>
   </body>
 </html>
