@@ -25,7 +25,7 @@
               <div class="lpBtn flexRow brittanyPage" ng-click='logIn("sew_products")'><p>BRITTANY PAGE</p></div>
               <div class="lpBtn flexRow brandiPage" ng-click='logIn("crochet_products")'><p>BRANDI PAGE</p></div>
               <div class="lpBtn flexRow signUp"><p>SIGN UP</p></div>
-              <div class="lpBtn flexRow loginBtn" ng-click='logIn("brittany")'><p>LOG IN</p></div>
+              <div class="lpBtn flexRow loginBtn"><p>SIGN IN</p></div>
             </div>
           </div>
           <div class="landingPageColorOne"></div>
@@ -43,7 +43,7 @@
     <!-- HOME NAV SLIDER -->
     <div class="homeNavSlider"></div>
 
-    <div class="container" ng-if="(currentPage === 'brands') || (currentPage === 'products') || (currentPage === 'designers') || (currentPage === 'contact') || (currentPage === 'home')">
+    <div class="container" ng-if="secondPageNavOptions.includes(currentPage.toUpperCase()) || currentPage === 'loading'">
 
       <!--        NAVIGATOIN       -->
       <div class="navigationBar flexRow">
@@ -88,7 +88,7 @@
             </div>
 
             <!--        CATEGORIES         -->
-            <div class="sideBarOption flexCol categories" ng-if="currentPage === 'brands'">
+            <div class="sideBarOption flexCol categories" ng-if="currentPage === 'brands' || currentPage === brittanyPageNavOptionName.toLowerCase() || currentPage === brandiPageNavOptionName.toLowerCase() || currentPage === 'loading'">
               <h1>CATEGORIES</h1>
 
               <div class="categoriesFilter flexRow" ng-repeat="category in filters.categories track by $index">
@@ -99,7 +99,7 @@
             </div>
 
             <!--        COLORS         -->
-            <div class="sideBarOption flexCol colors" ng-if="currentPage === 'brands'">
+            <div class="sideBarOption flexCol colors" ng-if="currentPage === 'brands' || currentPage === brittanyPageNavOptionName.toLowerCase() || currentPage === brandiPageNavOptionName.toLowerCase() || currentPage === 'loading'">
               <h1>COLORS</h1>
               <div class="colorSection flexRow">
 
@@ -128,7 +128,7 @@
         </div>
 
         <!--        ITEM SECTION         -->
-        <div class="itemSection flexRow" ng-if="currentPage === 'brands'">
+        <div class="itemSection flexRow" ng-if="currentPage === 'brands' || currentPage === brittanyPageNavOptionName.toLowerCase() || currentPage === brandiPageNavOptionName.toLowerCase()">
           <div id={{$index}} class="itemBox flexCol" ng-if="productsSet" ng-class={{dynamicClasses}}  ng-repeat="product in products track by $index" ng-mouseover="showOptions($event)" ng-mouseleave="hideOptions($event)">
 
             <div id={{$index}} class="itemPreview">
@@ -183,6 +183,11 @@
           <h1>CONTACT US</h1>
         </div>
 
+        <!--       LOADING SCREEN     -->
+        <div class="itemSection flexRow"  ng-if="currentPage === 'loading'">
+          <!-- <h1>loading...</h1> -->
+        </div>
+
       </div>
 
 
@@ -224,8 +229,7 @@
       .addToCartBtn:hover,
       .viewBtn:hover,
       .xBtn p:hover,
-      .imgHolder p ,
-      .navOptions[data="1"] { color: {{themeColor}}; }
+      .imgHolder p { color: {{themeColor}}; }
 
       .navigationBar { border-bottom: 0.1em solid {{themeBorderColor}}; }
 

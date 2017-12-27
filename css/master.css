@@ -293,7 +293,7 @@ body {
 }
 
 .cartItemsHolder {
-  max-height: 26em;
+  max-height: 19em;
   overflow-y: scroll;
   width: 100%;
 }
@@ -411,11 +411,15 @@ body {
 
 /*ITEM SECTION*/
 .cartItemsHolder::-webkit-scrollbar {
-	width: 0px;
+	width: 4px;
 }
 
 .itemSection::-webkit-scrollbar {
 	width: 4px;
+}
+
+.sideBar::-webkit-scrollbar {
+	width: 0px;
 }
 
 /*::-webkit-scrollbar              {background-color: blue;}*/

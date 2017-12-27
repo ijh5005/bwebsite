@@ -7,10 +7,11 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
   $scope.name = 'name';
   $scope.inLargeView = false;
   $rootScope.customIcon = './images/sewing.png';
-  $scope.products = data.products;
+  $rootScope.products = data.products;
   $scope.cartItems = data.cartItems;
   $scope.filters = data.filters;
   $scope.navOptions = data.navOptions;
+  $scope.secondPageNavOptions = ['BRANDS', 'BRITTANY', 'BRANDI', 'DESIGNERS', 'CONTACT'];
 
   $scope.showOptions = (e) => {
     const id = parseInt(e.currentTarget.id);
@@ -88,6 +89,8 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
     const pageClick = e.target.innerText.toLowerCase();
     if(pageClick != $rootScope.currentPage){
       $('.navOptions').css('color', '#000');
+      if(pageClick === 'brandi'){ $scope.themeColor = 'rgb(91, 148, 239)' }
+      else if(pageClick === 'brittany'){ $scope.themeColor = 'rgb(237, 125, 125)' }
       animate.navigatePage(e, pageClick, $scope.themeColor);
     }
   }
@@ -102,16 +105,29 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
     }
   }
   $scope.logIn = (productName) => {
+    //insert variable options in navigation bar
+    const isBrandsIncludedInNav = $scope.navOptions.includes($rootScope.brittanyPageNavOptionName);
+    if(!isBrandsIncludedInNav){
+      $scope.navOptions.splice(1, 0, $rootScope.brittanyPageNavOptionName, $rootScope.brandiPageNavOptionName);
+    }
+
+    if(productName === 'crochet_products'){ $scope.themeColor = 'rgb(91, 148, 239)' }
+    else if(productName === 'sew_products'){ $scope.themeColor = 'rgb(237, 125, 125)' }
+
     task.setThemeColors(productName);
     data.setProducts(productName);
-    animate.logIn($scope.themeColor);
-    $scope.products = data.products;
+    animate.logIn($scope.themeColor, productName);
+    $rootScope.products = data.products;
     $rootScope.productsSet = true;
   }
 
   $rootScope.bind = true;
   $rootScope.isIntervalInProgress = false;
   $rootScope.productsSet = false;
+  $rootScope.isBriitanyPageClicked = false;
+  $rootScope.isBrandiPageClicked = false;
+  $rootScope.brittanyPageNavOptionName = 'BRITTANY';
+  $rootScope.brandiPageNavOptionName = 'BRANDI';
   $rootScope.currentPage = "landingPage";
   $rootScope.landingPageBtnHoverColor = '#430909';
   $rootScope.landingPageBtnColor = '#ea6262';
@@ -139,15 +155,22 @@ app.controller('ctrl', ['$scope', '$rootScope', '$interval', '$timeout', 'animat
 }]);
 
 app.service('animate', function($rootScope, $timeout, $interval, data, task){
-  this.logIn = (themeColor) => {
+  this.logIn = (themeColor, productName) => {
     $('.homeNavSlider').addClass('transitionLeft').css('left', '0%');
     $timeout(() => {
       this.cancelPageAnimations();
-      $rootScope.currentPage = 'brands';
+      if(productName === 'crochet_products'){
+        $timeout(() => { $('.navOptions[data="2"]').css('color', themeColor); })
+        $rootScope.currentPage = $rootScope.brandiPageNavOptionName.toLowerCase();
+      }
+      else if(productName === 'sew_products'){
+        $timeout(() => { $('.navOptions[data="1"]').css('color', themeColor); })
+        $rootScope.currentPage = $rootScope.brittanyPageNavOptionName.toLowerCase();
+      }
       task.init();
       this.customButton();
-      const thisNav = $('.navOptions');
-      thisNav.css('color', themeColor);
+      // const thisNav = $('.navOptions');
+      // thisNav.css('color', themeColor);
       $('.homeNavSlider').css('left', '-100%');
       $timeout(() => { $('.homeNavSlider').removeClass('transitionLeft').css('left', '100%'); }, 800);
     }, 800);
@@ -207,6 +230,7 @@ app.service('animate', function($rootScope, $timeout, $interval, data, task){
     }, 50);
   }
   this.customButton = () => {
+    $('.point').show();
     let count = 0;
     let position = '-4em';
     const pointCustom = $interval(() => {
@@ -232,12 +256,44 @@ app.service('animate', function($rootScope, $timeout, $interval, data, task){
   }
   this.navigatePage = (e, pageClick, themeColor) => {
     if(!$rootScope.navigating){
-      const isHomePage = pageClick === 'home';
-      const selector = isHomePage ? '.homeNavSlider' : '.navSlider';
+      const isHomePageClicked = pageClick === 'home';
+      //chose page transition slide screen
+      const selector = isHomePageClicked ? '.homeNavSlider' : '.navSlider';
+      //helps pause navigation until animation is done
       $rootScope.navigating = true;
+
+      //used to switch between product pages
+      $rootScope.isBriitanyPageClicked = pageClick === $rootScope.brittanyPageNavOptionName.toLowerCase();
+      $rootScope.isBrandiPageClicked = pageClick === $rootScope.brandiPageNavOptionName.toLowerCase();
+      //set theme colors it product page is clicked
+      if ($rootScope.isBriitanyPageClicked) {
+        $rootScope.currentPage = "loading";
+        //wait for the transition screen to hide the page before changing products
+        $timeout(() => {
+          task.setThemeColors("sew_products");
+          data.setProducts("sew_products");
+          $rootScope.currentPage = $rootScope.brittanyPageNavOptionName.toLowerCase();
+          $rootScope.products = data.products;
+          $rootScope.productsSet = true;
+          this.customButton();
+        }, 500)
+      } else if ($rootScope.isBrandiPageClicked) {
+        $rootScope.currentPage = "loading";
+        //wait for the transition screen to hide the page before changing products
+        $timeout(() => {
+          task.setThemeColors("crochet_products");
+          data.setProducts("crochet_products");
+          $rootScope.currentPage = $rootScope.brandiPageNavOptionName.toLowerCase();
+          $rootScope.products = data.products;
+          $rootScope.productsSet = true;
+          this.customButton();
+        }, 500)
+      }
+      //starts the page tranistion screen
       $(selector).addClass('transitionLeft').css('left', '0%');
+      //fires after the transition left to continue page transition
       $timeout(() => {
-        if(isHomePage){
+        if(isHomePageClicked){
           $rootScope.landingPageBtnHoverColor = '#430909';
           $rootScope.landingPageBtnColor = '#ea6262';
           $rootScope.productsSet = false;
@@ -245,8 +301,9 @@ app.service('animate', function($rootScope, $timeout, $interval, data, task){
           $rootScope.currentPage = 'landingPage';
         }
         else { $rootScope.currentPage = pageClick; }
-        if($rootScope.currentPage === 'brands'){
-          $('.cartItemsHolder').css('maxHeight', '26em');
+        if ($rootScope.isBriitanyPageClicked) {
+          task.populateImgsOnPage();
+        } else if ($rootScope.isBrandiPageClicked) {
           task.populateImgsOnPage();
         } else {
           $('.cartItemsHolder').css('maxHeight', '45em');
@@ -338,7 +395,7 @@ app.service('animate', function($rootScope, $timeout, $interval, data, task){
 });
 
 app.service('data', function($rootScope, $interval, $timeout){
-  this.navOptions = ['HOME', 'BRANDS', 'DESIGNERS', 'CONTACT'],
+  this.navOptions = ['HOME', 'DESIGNERS', 'CONTACT'],
   this.cartItems = [],
   this.products = sew_products;           // this comes from database.js
   this.setProducts = (productName) => {
